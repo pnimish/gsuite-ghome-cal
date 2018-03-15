@@ -10,9 +10,9 @@ Follow these steps:
 * Go to your Gsuite account and create a new AppScript: https://script.google.com/intro
 * Paste the code from CalendarSyncGoogleHome.appscript into the new script.
   * Change the following:
-    * Replace "<gsuite-email>" with your Gsuite Email.
-    * Replace "<personal-email>" with your email on the Google Home account.
-    * Replace "<calendar-id-for-personal-calendar-from-settings>" with Calendar ID copied above.
+    * Replace "gsuite-email" with your Gsuite Email.
+    * Replace "personal-email" with your email on the Google Home account.
+    * Replace "calendar-id-for-personal-calendar-from-settings" with Calendar ID copied above.
 * Save the script.
 * Click on Triggers for current project (Clock icon). Add a new Trigger to run the script every 6 hours or so.
 * Try running the script manually. You should see events being copied from your Gsuite primary calendar to the Work calendar in your personal account.
