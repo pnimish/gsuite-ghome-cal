@@ -1,0 +1,47 @@
+function addToGoogleHome() {
+    var calendarsWithName = {
+       "Work": "<gsuite-email>"
+    };
+    var google_home_email = "<personal-email>";
+    var google_home_calendar_id = "<calendar-id-for-personal-calendar-from-settings>";
+
+    var googleHomeCalendar = CalendarApp.getCalendarById(google_home_calendar_id);
+
+    var days = [new Date()];
+    for (d = 1; d < 7; d++) {
+        days.push(new Date());
+        days[d].setDate(days[d].getDate() + d);
+    }
+    
+    var num_events = 0;
+    var msg = "";
+
+    for (var d = 0; d < days.length; d++) {
+      var day = days[d];
+      msg += "\n======= " + day + " =======\n";
+      for (var i in calendarsWithName) {
+        var calendarToCopy = CalendarApp.getCalendarById(calendarsWithName[i]);
+        var name = i;
+        
+        if (calendarsWithName.size == 1) {
+          name = "";
+        }
+        var events = calendarToCopy.getEventsForDay(day);
+        
+        var existingEvents = googleHomeCalendar.getEventsForDay(day);
+        for (var j = 0; j < existingEvents.length; j++) {
+          existingEvents[j].deleteEvent();
+          msg += "Deleted event: " + existingEvents[j].getTitle() + "\n";
+        }
+        msg += "\n================================\n";
+        // Create events
+        for (var j = 0; j < events.length; j++) {
+          googleHomeCalendar.createEvent(name + " " + events[j].getTitle(), events[j].getStartTime(), events[j].getEndTime());
+          msg += "Added event: " + events[j].getTitle() + " from " + events[j].getStartTime() + " to " + events[j].getEndTime() + "\n";
+        }
+        num_events = num_events + events.length;
+      }
+    }
+
+    GmailApp.sendEmail(google_home_email, "copied " + num_events + " events.", msg);
+}
