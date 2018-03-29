@@ -4,7 +4,6 @@ function addToGoogleHome() {
     };
     var google_home_email = "<personal-email>";
     var google_home_calendar_id = "<calendar-id-for-personal-calendar-from-settings>";
-
     var googleHomeCalendar = CalendarApp.getCalendarById(google_home_calendar_id);
 
     var days = [new Date()];
@@ -19,6 +18,12 @@ function addToGoogleHome() {
     for (var d = 0; d < days.length; d++) {
       var day = days[d];
       msg += "\n======= " + day + " =======\n";
+      var existingEvents = googleHomeCalendar.getEventsForDay(day);
+      for (var j = 0; j < existingEvents.length; j++) {
+        existingEvents[j].deleteEvent();
+        msg += "Deleted event: " + existingEvents[j].getTitle() + "\n";
+      }
+      msg += "\n================================\n";
       for (var i in calendarsWithName) {
         var calendarToCopy = CalendarApp.getCalendarById(calendarsWithName[i]);
         var name = i;
@@ -28,12 +33,6 @@ function addToGoogleHome() {
         }
         var events = calendarToCopy.getEventsForDay(day);
         
-        var existingEvents = googleHomeCalendar.getEventsForDay(day);
-        for (var j = 0; j < existingEvents.length; j++) {
-          existingEvents[j].deleteEvent();
-          msg += "Deleted event: " + existingEvents[j].getTitle() + "\n";
-        }
-        msg += "\n================================\n";
         // Create events
         for (var j = 0; j < events.length; j++) {
           googleHomeCalendar.createEvent(name + " " + events[j].getTitle(), events[j].getStartTime(), events[j].getEndTime());
